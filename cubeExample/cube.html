@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset=utf-8>
+    <title>Moving Cube Three.js</title>
+    <style>
+        body {
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        #container{
+            margin: auto;
+            position: absolute;
+            top: 100px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color:#000000;
+        }
+    </style>
+
+    // include three.js
+
+    <script src="/js/three.min.js"></script>
+    <script>
+
+        function onLoad() {
+            // Create a scene
+
+            var scene = new THREE.Scene();
+
+            // get  container
+
+            var container = document.getElementById("container");
+
+            // Create a renderer
+
+            var renderer = new THREE.WebGLRenderer();
+
+            // set size of renderer
+
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+
+            // append  renderer into container
+
+            container.appendChild(renderer.domElement);
+
+            // Crete a geometry like (Plane or box etc )
+
+            var geometry = new THREE.BoxGeometry(1, 1, 1);
+            // Crete a material like CSS for object
+
+            var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+
+            // Crete a shape with geometry & material
+
+            var cube = new THREE.Mesh(geometry, material);
+
+            // add shape into scene
+
+            scene.add(cube);
+
+            // Crete a camera with angele ratio and min max zoom etc
+
+            var camera = new THREE.PerspectiveCamera(45, container.offsetWidth/ container.offsetHeight, 0.1, 1000);
+
+            // set position of camera
+
+            camera.position.set( 0, 0, 5 );
+
+            // method to render
+
+            function render() {
+                // requestAnimationFrame will call render method at its refresh rate 60frame/sec
+
+                requestAnimationFrame( render );
+
+                // rotate the shape
+
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                // render the scene and put the camera to view scene
+
+                renderer.render( scene, camera );
+            }
+
+            render();
+        }
+    </script>
+
+
+</head>
+<body onLoad="onLoad();">
+<h3>Moving Cube</h3>
+<div id="container">
+</div>
+</body>
+</html>
+
