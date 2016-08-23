@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset=utf-8>
+    <title>interact Cube Three.js</title>
+    <style>
+        * {
+            font-family: Arial;
+            font-style: italic;
+        }
+
+        body {
+            background-color:#eeeeee;
+            color:#212121;
+        }
+
+        #container{
+            z-index:-1;
+            margin: auto;
+            position: absolute;
+            top: 0px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 95%;
+            height: 80%;
+            background-color:#000000;
+        }
+
+        #prompt{
+            width:95%;
+            height:6%;
+            bottom:0;
+            position:absolute;
+        }
+    </style>
+
+    <script src="/js/three.min.js"></script>
+    <script>
+
+        var renderer = null,
+                scene = null,
+                camera = null,
+                cube = null,
+                animating = false;
+
+        function onLoad() {
+            // Create a scene
+
+            scene = new THREE.Scene();
+
+            // get  container
+
+            var container = document.getElementById("container");
+
+            // Create a renderer
+
+            renderer = new THREE.WebGLRenderer();
+
+            // set size of renderer
+
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+
+            // append  renderer into container
+
+            container.appendChild(renderer.domElement);
+
+
+            // Create a shaded, texture-mapped cube and add it to the scene
+            // First, create the texture map
+            var mapUrl = "/images/offer.jpg";
+            var map = THREE.ImageUtils.loadTexture(mapUrl);
+
+            // Now, create a Phong material to show shading; pass in the map
+            var material = new THREE.MeshPhongMaterial({ map: map });
+
+
+            // Crete a geometry like (Plane or box etc )
+
+            var geometry = new THREE.CubeGeometry(1, 1, 1);
+
+            // Crete a shape with geometry & material
+
+            cube = new THREE.Mesh(geometry, material);
+
+            // Turn it toward the scene, or we won't see the cube shape!
+
+            cube.rotation.x = Math.PI / 5;
+            cube.rotation.y = Math.PI / 5;
+
+            // add shape into scene
+
+            scene.add(cube);
+
+            // Crete a camera with angele ratio and min max zoom etc
+
+            camera = new THREE.PerspectiveCamera(45, container.offsetWidth/ container.offsetHeight, 0.1, 1000);
+
+            // set position of camera
+
+            camera.position.set( 0, 0, 5 );
+
+
+            // Create a directional light to show off the object
+
+            var light = new THREE.DirectionalLight( 0xffffff, 1.5);
+            light.position.set(0, 0, 1);
+            scene.add( light );
+
+
+
+
+            // Add a mouse up handler to toggle the animation
+
+            addMouseHandler();
+
+            // Run our render loop
+
+            run();
+        }
+
+        function run()
+        {
+            // Render the scene
+            renderer.render( scene, camera );
+            // Spin the cube for next frame
+            if (animating)
+            {
+                cube.rotation.y -= 0.01;
+            }
+            // Ask for another frame
+            requestAnimationFrame(run);
+        }
+
+        function addMouseHandler()
+        {
+            var dom = renderer.domElement;
+            dom.addEventListener( 'mouseup', onMouseUp, false);
+        }
+
+        function onMouseUp    (event)
+        {
+            event.preventDefault();
+            animating = !animating;
+        }
+
+    </script>
+
+
+</head>
+<body onLoad="onLoad();">
+<center><h1>Interact cube</h1></center>
+<div id="container">
+</div>
+<div id="prompt">
+    Click on the cube to animate
+</div>
+</body>
+</html>
+
